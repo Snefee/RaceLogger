@@ -53,7 +53,7 @@ namespace RaceLogger
         {
             AllocConsole();
 
-            Console.Title = "LMU Excel Sync";
+            Console.Title = "RaceLogger";
 
             StreamWriter standardOutput = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
             Console.SetOut(standardOutput);
@@ -71,7 +71,7 @@ namespace RaceLogger
 
             // --- System Tray Icon Setup ---
             NotifyIcon trayIcon = new NotifyIcon();
-            trayIcon.Text = "LMU Excel Sync";
+            trayIcon.Text = "RaceLogger";
             trayIcon.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
             trayIcon.Visible = true;
 
