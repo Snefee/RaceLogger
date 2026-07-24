@@ -1,0 +1,153 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="RaceLogger.App.MainWindow"
+        Title="RaceLogger"
+        Width="1050" Height="650"
+        Background="#1b1b1b"
+        Foreground="#e4e4e4"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <!-- Sidebar menu items styling -->
+        <Style Selector="ListBoxItem">
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Foreground" Value="#e4e4e4"/>
+        </Style>
+        
+        <!-- Menu items hover effect -->
+        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3a3a3a"/>
+            <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
+        </Style>
+        
+        <!-- Menu item selected color -->
+        <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#4A148C"/>
+            <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
+        </Style>
+    </Window.Styles>
+
+    <!-- Main SplitView -->
+    <SplitView x:Name="MainSplitView"
+               DisplayMode="CompactInline"
+               IsPaneOpen="False"
+               CompactPaneLength="65"
+               OpenPaneLength="220"
+               PaneBackground="#2a2a2a">
+
+        <!-- LEFT SIDEBAR (Burger Menu) -->
+        <SplitView.Pane>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Burger button -->
+                    <RowDefinition Height="*"/>    <!-- Top Menu -->
+                    <RowDefinition Height="Auto"/> <!-- Settings -->
+                </Grid.RowDefinitions>
+
+                <!-- Hamburger Button -->
+                <Button Grid.Row="0" x:Name="HamburgerBtn"
+                        Click="HamburgerBtn_Click"
+                        Width="65" Height="65"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        HorizontalAlignment="Left"
+                        CornerRadius="0">
+                    <TextBlock Text="☰" FontSize="26" Foreground="#9C27B0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                </Button>
+
+                <!-- Main Navigation -->
+                <ListBox Grid.Row="1" Background="Transparent" BorderThickness="0" SelectedIndex="0">
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                            <!-- Margin for better icon alignment -->
+                            <TextBlock Text="🏠" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                            <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                            <TextBlock Text="📈" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                            <TextBlock Text="Telemetry" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                            <TextBlock Text="🏆" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                            <TextBlock Text="Leaderboard" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                    
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                            <TextBlock Text="🕒" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                            <TextBlock Text="Drive History" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+
+                <!-- Settings locked to the bottom -->
+                <ListBox Grid.Row="2" Background="Transparent" BorderThickness="0" Margin="0,0,0,10">
+                    <ListBoxItem>
+                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                            <TextBlock Text="⚙️" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                            <TextBlock Text="Settings" FontSize="16" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ListBoxItem>
+                </ListBox>
+            </Grid>
+        </SplitView.Pane>
+
+        <!-- DASHBOARD AREA -->
+        <SplitView.Content>
+            <Grid Margin="30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Connection Status Header -->
+                    <RowDefinition Height="*"/>    <!-- Panels -->
+                </Grid.RowDefinitions>
+
+                <!-- Top Right Status -->
+                <StackPanel Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,20">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+                        <Ellipse x:Name="StatusIcon" Width="10" Height="10" Fill="Red" VerticalAlignment="Center" Margin="0,2,0,0"/>
+                        <TextBlock x:Name="StatusText" Text="Disconnected" FontSize="14" Foreground="#a0a0a0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    <TextBlock x:Name="DriverInfoText" Text="Waiting for game..." FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Dashboard Layout -->
+                <Grid Grid.Row="1" Margin="0,20,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Recent Drive Panel -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                        <TextBlock Text="Recent drive" FontSize="22" Margin="0,0,0,12"/>
+                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                    </StackPanel>
+
+                    <!-- Leaderboard Changes Panel -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                        <TextBlock Text="Leaderboard Changes" FontSize="22" Margin="0,0,0,12"/>
+                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                    </StackPanel>
+
+                    <!-- Shortcuts Panel -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
+                        <TextBlock Text="Shortcuts" FontSize="22" Margin="0,0,0,12"/>
+                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </SplitView.Content>
+    </SplitView>
+</Window>
