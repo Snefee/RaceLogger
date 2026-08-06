@@ -14,4 +14,10 @@
     <Content Include="LMU_GS.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="RaceLogger.App\**" />
+    <EmbeddedResource Remove="RaceLogger.App\**" />
+    <None Remove="RaceLogger.App\**" />
+  </ItemGroup>
+
 </Project>

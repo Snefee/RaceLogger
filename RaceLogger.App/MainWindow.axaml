@@ -1,11 +1,21 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:RaceLogger.App.Views"
         x:Class="RaceLogger.App.MainWindow"
         Title="RaceLogger"
-        Width="1050" Height="650"
+        Width="1100" Height="700"
+        MinWidth="900" MinHeight="600"
         Background="#1b1b1b"
         Foreground="#e4e4e4"
         WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="TrackGeometries.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
 
     <Window.Styles>
         <!-- Sidebar menu items styling -->
@@ -16,138 +26,731 @@
             <Setter Property="Foreground" Value="#e4e4e4"/>
         </Style>
         
-        <!-- Menu items hover effect -->
         <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="#3a3a3a"/>
             <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
         </Style>
         
-        <!-- Menu item selected color -->
         <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="#4A148C"/>
             <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
         </Style>
+
+        <!-- Custom styling for Exit Button -->
+        <Style Selector="Button.exitBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#e4e4e4"/>
+            <Setter Property="Padding" Value="15,12"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.exitBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#D32F2F"/>
+            <Setter Property="TextElement.Foreground" Value="White"/>
+        </Style>
+
+        <!-- Custom styling for Track Cards -->
+        <Style Selector="Button.trackCard">
+            <Setter Property="Background" Value="#2a2a2a"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.trackCard:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#4A148C"/>
+            <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
+        </Style>
+
+        <!-- Custom styling for TextBoxes (Inputs) -->
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#2a2a2a"/>
+            <Setter Property="Foreground" Value="#e4e4e4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+            <Setter Property="Foreground" Value="#7a7a7a"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#2a2a2a"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#9C27B0"/>
+            <Setter Property="Background" Value="#2a2a2a"/>
+        </Style>
+
+        <Style Selector="TextBox#ConsoleOutputTextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#0A0A0A"/>
+        </Style>
+        <Style Selector="TextBox#ConsoleOutputTextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#0A0A0A"/>
+            <Setter Property="BorderBrush" Value="#333"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        
+        <!-- ComboBox -->
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#2a2a2a"/>
+            <Setter Property="Foreground" Value="#e4e4e4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="ComboBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#3a3a3a"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <!-- Action Buttons -->
+        <Style Selector="Button.saveBtn">
+            <Setter Property="Background" Value="#4A148C"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.saveBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#9C27B0"/>
+            <Setter Property="TextElement.Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.cancelBtn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#a0a0a0"/>
+        </Style>
+        <Style Selector="Button.cancelBtn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#3a3a3a"/>
+            <Setter Property="TextElement.Foreground" Value="#e4e4e4"/>
+        </Style>
+
+
+        <!-- Circuit and Class toggles -->
+        <Style Selector="RadioButton.flatToggle">
+            <Setter Property="Background" Value="#444"/>
+            <Setter Property="Foreground" Value="#a0a0a0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Theme" Value="{x:Null}"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border x:Name="FlatBg"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="#1b1b1b"
+                            BorderThickness="0,0,1,0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <TextBlock Text="{TemplateBinding Content}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Margin="25,8"
+                                   Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="RadioButton.flatToggle:pointerover /template/ Border#FlatBg">
+            <Setter Property="Opacity" Value="0.8"/>
+        </Style>
+
+        <Style Selector="RadioButton.flatToggle:checked">
+            <Setter Property="Foreground" Value="#e4e4e4"/>
+        </Style>
+
+        <!-- Class Colors -->
+        <Style Selector="RadioButton.flatToggle.gte:checked /template/ Border#FlatBg">
+            <Setter Property="Background" Value="#E65100"/>
+        </Style>
+        <Style Selector="RadioButton.flatToggle.gt3:checked /template/ Border#FlatBg">
+            <Setter Property="Background" Value="#43A047"/>
+        </Style>
+        <Style Selector="RadioButton.flatToggle.lmp3:checked /template/ Border#FlatBg">
+            <Setter Property="Background" Value="#8E24AA"/>
+        </Style>
+        <Style Selector="RadioButton.flatToggle.lmp2:checked /template/ Border#FlatBg">
+            <Setter Property="Background" Value="#1E88E5"/>
+        </Style>
+        <Style Selector="RadioButton.flatToggle.hyp:checked /template/ Border#FlatBg">
+            <Setter Property="Background" Value="#E53935"/>
+        </Style>
     </Window.Styles>
 
-    <!-- Main SplitView -->
-    <SplitView x:Name="MainSplitView"
-               DisplayMode="CompactInline"
-               IsPaneOpen="False"
-               CompactPaneLength="65"
-               OpenPaneLength="220"
-               PaneBackground="#2a2a2a">
+    <Panel>
+        <SplitView x:Name="MainSplitView"
+                   DisplayMode="CompactInline"
+                   IsPaneOpen="False"
+                   CompactPaneLength="65"
+                   OpenPaneLength="220"
+                   PaneBackground="#2a2a2a">
 
-        <!-- LEFT SIDEBAR (Burger Menu) -->
-        <SplitView.Pane>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Burger button -->
-                    <RowDefinition Height="*"/>    <!-- Top Menu -->
-                    <RowDefinition Height="Auto"/> <!-- Settings -->
-                </Grid.RowDefinitions>
-
-                <!-- Hamburger Button -->
-                <Button Grid.Row="0" x:Name="HamburgerBtn"
-                        Click="HamburgerBtn_Click"
-                        Width="65" Height="65"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        HorizontalAlignment="Left"
-                        CornerRadius="0">
-                    <TextBlock Text="☰" FontSize="26" Foreground="#9C27B0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                </Button>
-
-                <!-- Main Navigation -->
-                <ListBox Grid.Row="1" Background="Transparent" BorderThickness="0" SelectedIndex="0">
-                    <ListBoxItem>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
-                            <!-- Margin for better icon alignment -->
-                            <TextBlock Text="🏠" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
-                            <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                    
-                    <ListBoxItem>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
-                            <TextBlock Text="📈" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
-                            <TextBlock Text="Telemetry" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                    
-                    <ListBoxItem>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
-                            <TextBlock Text="🏆" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
-                            <TextBlock Text="Leaderboard" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                    
-                    <ListBoxItem>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
-                            <TextBlock Text="🕒" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
-                            <TextBlock Text="Drive History" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                </ListBox>
-
-                <!-- Settings locked to the bottom -->
-                <ListBox Grid.Row="2" Background="Transparent" BorderThickness="0" Margin="0,0,0,10">
-                    <ListBoxItem>
-                        <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
-                            <TextBlock Text="⚙️" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
-                            <TextBlock Text="Settings" FontSize="16" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </ListBoxItem>
-                </ListBox>
-            </Grid>
-        </SplitView.Pane>
-
-        <!-- DASHBOARD AREA -->
-        <SplitView.Content>
-            <Grid Margin="30">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Connection Status Header -->
-                    <RowDefinition Height="*"/>    <!-- Panels -->
-                </Grid.RowDefinitions>
-
-                <!-- Top Right Status -->
-                <StackPanel Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,20">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
-                        <Ellipse x:Name="StatusIcon" Width="10" Height="10" Fill="Red" VerticalAlignment="Center" Margin="0,2,0,0"/>
-                        <TextBlock x:Name="StatusText" Text="Disconnected" FontSize="14" Foreground="#a0a0a0" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <TextBlock x:Name="DriverInfoText" Text="Waiting for game..." FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,2,0,0"/>
-                </StackPanel>
-
-                <!-- Dashboard Layout -->
-                <Grid Grid.Row="1" Margin="0,20,0,0">
+            <!-- LEFT SIDEBAR -->
+            <SplitView.Pane>
+                <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
 
-                    <!-- Recent Drive Panel -->
-                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
-                        <TextBlock Text="Recent drive" FontSize="22" Margin="0,0,0,12"/>
-                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
-                    </StackPanel>
+                    <Button Grid.Row="0" x:Name="HamburgerBtn" Click="HamburgerBtn_Click" Width="65" Height="65" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" CornerRadius="0">
+                        <TextBlock Text="☰" FontSize="26" Foreground="#9C27B0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
+                    </Button>
 
-                    <!-- Leaderboard Changes Panel -->
-                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
-                        <TextBlock Text="Leaderboard Changes" FontSize="22" Margin="0,0,0,12"/>
-                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
-                    </StackPanel>
+                    <ListBox Grid.Row="1" x:Name="MainNavList" Background="Transparent" BorderThickness="0" SelectedIndex="0" SelectionChanged="MainNavList_SelectionChanged">
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                <TextBlock Text="🏠" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                                <TextBlock Text="Dashboard" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                <TextBlock Text="📈" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                                <TextBlock Text="Telemetry" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                <TextBlock Text="🏆" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                                <TextBlock Text="Leaderboard" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                        <ListBoxItem>
+                            <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                <TextBlock Text="🕒" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-3,0,0"/>
+                                <TextBlock Text="Drive History" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ListBoxItem>
+                    </ListBox>
 
-                    <!-- Shortcuts Panel -->
-                    <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
-                        <TextBlock Text="Shortcuts" FontSize="22" Margin="0,0,0,12"/>
-                        <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                    <StackPanel Grid.Row="2" Margin="0,0,0,10">
+                        <ListBox x:Name="SettingsNavList" Background="Transparent" BorderThickness="0" SelectionChanged="SettingsNavList_SelectionChanged">
+                            <ListBoxItem x:Name="DevConsoleMenuItem" IsVisible="False">
+                                <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                    <TextBlock Text="💻" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                                    <TextBlock Text="Console" FontSize="16" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </ListBoxItem>
+                            <ListBoxItem x:Name="SettingsMenuItem">
+                                <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                    <TextBlock Text="⚙️" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                                    <TextBlock Text="Settings" FontSize="16" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </ListBoxItem>
+                        </ListBox>
+
+                        <Button x:Name="ExitAppBtn" Classes="exitBtn" Click="ExitAppBtn_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="15" VerticalAlignment="Center">
+                                <TextBlock Text="🚪" FontSize="20" Width="25" TextAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                                <TextBlock Text="Exit" FontSize="16" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
-            </Grid>
-        </SplitView.Content>
-    </SplitView>
+            </SplitView.Pane>
+
+            <!-- MAIN CONTENT AREA -->
+            <SplitView.Content>
+                <Grid Margin="30">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel x:Name="GlobalTopBar" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+                            <Ellipse x:Name="StatusIcon" Width="10" Height="10" Fill="Red" VerticalAlignment="Center" Margin="0,2,0,0"/>
+                            <TextBlock x:Name="StatusText" Text="Disconnected" FontSize="14" Foreground="#a0a0a0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock x:Name="DriverInfoText" Text="Waiting for game..." FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <!-- VIEWS CONTAINER -->
+                    <Grid Grid.Row="1" Margin="0,20,0,0">
+                        
+                        <!-- DASHBOARD VIEW -->
+                        <Grid x:Name="DashboardView" IsVisible="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                                <TextBlock Text="Recent drive" FontSize="22" Margin="0,0,0,12"/>
+                                <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10">
+                                <TextBlock Text="Leaderboard Changes" FontSize="22" Margin="0,0,0,12"/>
+                                <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
+                                <TextBlock Text="Shortcuts" FontSize="22" Margin="0,0,0,12"/>
+                                <Border Background="#2a2a2a" CornerRadius="8" VerticalAlignment="Stretch" Height="180"/>
+                            </StackPanel>
+                        </Grid>
+
+
+
+                        <!-- ============================== -->
+                        <!-- LEADERBOARD VIEW PAGE -->
+                        <!-- ============================== -->
+                        <Grid x:Name="LeaderboardView" IsVisible="False" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- CLASS FILTER -->
+                            <StackPanel Grid.Row="0" Margin="10,0,10,25" Spacing="15" HorizontalAlignment="Center">
+
+                                <!-- SWITCH Classes -->
+                                <Border CornerRadius="8" ClipToBounds="True" Background="#333" BorderBrush="#1b1b1b" BorderThickness="1" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton x:Name="FilterGt3" Classes="flatToggle gt3" Content="GT3" GroupName="ClassGroup" IsChecked="True" IsCheckedChanged="FilterClass_Checked"/>
+                                        <RadioButton x:Name="FilterGte" Classes="flatToggle gte" Content="GTE" GroupName="ClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                                        <RadioButton x:Name="FilterLmp3" Classes="flatToggle lmp3" Content="LMP3" GroupName="ClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                                        <RadioButton x:Name="FilterLmp2" Classes="flatToggle lmp2" Content="LMP2" GroupName="ClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                                        <RadioButton x:Name="FilterHyp" Classes="flatToggle hyp" Content="HYP" GroupName="ClassGroup" BorderThickness="0" IsCheckedChanged="FilterClass_Checked"/>
+                                    </StackPanel>
+                                </Border>      
+                            </StackPanel>
+
+                            <ScrollViewer Grid.Row="1">
+                                <UniformGrid Columns="2" VerticalAlignment="Top">
+                                    
+
+                                    <!-- TRACK PANELS -->
+                                    <!-- Spa -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Spa-Francorchamps" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Spa">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <Path Grid.Column="0" Data="{StaticResource TrackSpa}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Monza -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Monza" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Monza">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackMonza}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- De La Sarthe -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Circuit De La Sarthe" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="DeLaSarthe">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackDeLaSarthe}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Fuji -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Fuji Speedway" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Fuji">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackFuji}" Fill="#e4e4e4" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Bahrain -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Bahrain Sakhir Circuit" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Bahrain">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackBahrain}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Interlagos -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Interlagos" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Interlagos">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackInterlagos}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Portimao -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Algarve (Portimão)" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Portimao">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackPortimao}" Fill="#e4e4e4" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- COTA -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Circuit Of The Americas" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="COTA">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackCOTA}" Fill="#e4e4e4" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Imola -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Imola" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Imola">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackImola}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Paul Ricard -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Circuit Paul Ricard" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="PaulRicard">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackPaulRicard}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Daytona -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Daytona International Speedway" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Daytona">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackDaytona}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Lusail -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Lusail Circuit" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Lusail">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackLusail}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Silverstone -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Silverstone" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Silverstone">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackSilverstone}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Laguna Seca -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Laguna Seca" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="LagunaSeca">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackLagunaSeca}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+
+                                    <!-- Sebring -->
+                                    <StackPanel Margin="10,10,10,25">
+                                        <TextBlock Text="Sebring" FontSize="20" Margin="0,0,0,8"/>
+                                        <Button Classes="trackCard" Height="220" Click="TrackCard_Click" Tag="Sebring">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="0" Data="{StaticResource TrackSebring}" Fill="Transparent" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15" MaxWidth="150" MaxHeight="150"/>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8" Margin="20,0,0,0" Width="130">
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                    <TextBlock Text="..." FontSize="16" Foreground="#a0a0a0"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+                                    
+                                </UniformGrid>
+                            </ScrollViewer>
+                        </Grid>
+                        <!-- END OF LEADERBOARD PAGE VIEW -->
+
+
+                        <!-- DEV CONSOLE VIEW -->
+                        <Grid x:Name="DevConsoleView" IsVisible="False" Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Text="System Console" FontSize="22" Margin="0,0,0,12"/>
+                            <TextBox Grid.Row="1" x:Name="ConsoleOutputTextBox" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Background="#0A0A0A" Foreground="#e4e4e4" FontFamily="Consolas" BorderThickness="1" BorderBrush="#333" Padding="15" FontSize="14"/>
+                        </Grid>
+
+                        <!-- SETTINGS VIEW -->
+                        <ScrollViewer x:Name="SettingsView" IsVisible="False" Margin="10">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0" Spacing="25" Margin="0,0,20,0">
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Google Sheets Link" FontSize="22"/>
+                                            <TextBlock Text="Webhook URL for syncing best times and telemetry data to your spreadsheet." FontSize="14" Foreground="#a0a0a0"/>
+                                        </StackPanel>
+                                        <TextBox x:Name="SheetsLinkInput" Watermark="Paste your webhook URL here..." TextChanged="Settings_Changed"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Developer Mode" FontSize="22"/>
+                                            <TextBlock Text="Enables console view, where you can see all application logs. Good for debugging." FontSize="14" Foreground="#a0a0a0"/>
+                                        </StackPanel>
+                                        <ToggleSwitch x:Name="DevModeToggle" OnContent="Enabled" OffContent="Disabled" IsCheckedChanged="Settings_Changed"/>
+                                    </StackPanel>
+
+                                    <!-- SETTING Startup Mode -->
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Automatic Startup" FontSize="22"/>
+                                            <TextBlock Text="Launch RaceLogger automatically when you start your PC." FontSize="14" Foreground="#a0a0a0"/>
+                                        </StackPanel>
+                                        <ComboBox x:Name="StartupComboBox" SelectionChanged="Settings_Changed">
+                                            <ComboBoxItem Content="Disabled"/>
+                                            <ComboBoxItem Content="Enabled, window visible"/>
+                                            <ComboBoxItem Content="Enabled, hidden in tray"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <!-- SETTING Exit Action -->
+                                    <StackPanel Spacing="8">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Exit Action" FontSize="22"/>
+                                            <TextBlock Text="What should happen when you click the close (X) button." FontSize="14" Foreground="#a0a0a0"/>
+                                        </StackPanel>
+                                        <ComboBox x:Name="ExitActionComboBox" SelectionChanged="Settings_Changed">
+                                            <ComboBoxItem Content="Close the app"/>
+                                            <ComboBoxItem Content="Hide to tray"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- SETTING Save Controls -->
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="15" Margin="0,30,0,20">
+                                    <Button x:Name="SaveSettingsBtn" Classes="saveBtn" Content="Save Settings" Click="SaveSettingsBtn_Click" Padding="20,10" CornerRadius="6" FontSize="16"/>
+                                    <TextBlock x:Name="SavedNotification" Text="✅ Saved!" Foreground="LimeGreen" FontSize="16" VerticalAlignment="Center" IsVisible="False"/>
+                                </StackPanel>
+                            </Grid>
+                        </ScrollViewer>
+                        
+                        <!-- TRACK DETAILS VIEW -->
+                    <views:TrackDetailsView x:Name="TrackDetailsControl" IsVisible="False" Margin="0,-20,0,0"/>
+                        
+                    </Grid>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+        
+        <!-- UNSAVED CHANGES MODAL OVERLAY -->
+        <Grid x:Name="UnsavedChangesModal" IsVisible="False" Background="#B2000000" ZIndex="100">
+            <Border Background="#2a2a2a" CornerRadius="8" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="#3a3a3a" BorderThickness="1">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="Unsaved Changes" FontSize="22" FontWeight="Bold" Foreground="#FF3366"/>
+                    <TextBlock Text="Are you sure you want to discard your unsaved changes?" FontSize="16" MaxWidth="350" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <Button Classes="cancelBtn" Content="Cancel" Click="ModalCancel_Click" Padding="15,8" CornerRadius="6"/>
+                        <Button Content="Yes, discard" Click="ModalDiscard_Click" Background="#444" Foreground="#e4e4e4" Padding="15,8" CornerRadius="6"/>
+                        <Button Classes="saveBtn" Content="No, save" Click="ModalSave_Click" Padding="15,8" CornerRadius="6"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- MISSING WEBHOOK MODAL OVERLAY -->
+        <Grid x:Name="MissingWebhookModal" IsVisible="False" Background="#B2000000" ZIndex="100">
+            <Border Background="#2a2a2a" CornerRadius="8" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="#3a3a3a" BorderThickness="1" Width="450">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="Missing Google Sheets Link" FontSize="22" FontWeight="Bold" Foreground="#FFB300"/>
+                    <TextBlock Text="To view the leaderboard, please set up your Google Sheets webhook link so we can fetch your lap times." FontSize="16" TextWrapping="Wrap"/>
+                    <TextBox x:Name="QuickWebhookInput" Watermark="Paste your webhook URL here..." Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <Button Classes="cancelBtn" Content="Cancel" Click="MissingWebhookModalCancel_Click" Padding="15,8" CornerRadius="6"/>
+                        <Button Classes="saveBtn" Content="Save &amp; Sync" Click="MissingWebhookModalSave_Click" Padding="15,8" CornerRadius="6"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- EXIT CONFIRMATION MODAL OVERLAY -->
+        <Grid x:Name="ExitConfirmationModal" IsVisible="False" Background="#B2000000" ZIndex="100">
+            <Border Background="#2a2a2a" CornerRadius="8" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center" BorderBrush="#3a3a3a" BorderThickness="1">
+                <StackPanel Spacing="20">
+                    <TextBlock Text="Exit RaceLogger" FontSize="22" FontWeight="Bold" Foreground="#e4e4e4"/>
+                    <TextBlock Text="Are you sure you want to close the app?" FontSize="16" MaxWidth="350" TextWrapping="Wrap"/>
+                    <StackPanel Orientation="Horizontal" Spacing="15" HorizontalAlignment="Right" Margin="0,15,0,0">
+                        <Button Classes="cancelBtn" Content="Cancel" Click="ExitModalCancel_Click" Padding="15,8" CornerRadius="6"/>
+                        <Button Content="Exit" Click="ExitModalConfirm_Click" Background="#D32F2F" Foreground="White" Padding="15,8" CornerRadius="6"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Panel>
 </Window>

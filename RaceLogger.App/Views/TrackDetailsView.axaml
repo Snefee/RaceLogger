@@ -1,0 +1,142 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:RaceLogger.App.Views"
+             x:Class="RaceLogger.App.Views.TrackDetailsView">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="Auto"/> <!-- Class Filters -->
+            <RowDefinition Height="Auto"/> <!-- Column Headers -->
+            <RowDefinition Height="*"/>    <!-- Expanded Times List -->
+        </Grid.RowDefinitions>
+
+        <!-- HEADER -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="220"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Back button -->
+            <Button Grid.Column="0" x:Name="BackButton" Content="← Back to Leaderboard" Background="Transparent" Foreground="#a0a0a0" FontSize="16" Cursor="Hand" Click="BackButton_Click" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="0"/>
+
+            <!-- Circuit selection -->
+            <ComboBox Grid.Column="1" x:Name="LayoutSelector" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                      Background="Transparent" BorderThickness="0" FontSize="26" FontWeight="Bold" Foreground="#e4e4e4" Cursor="Hand"
+                      SelectionChanged="LayoutSelector_SelectionChanged">
+            </ComboBox>
+
+            <!-- GAME STATUS [Local for this screen] -->
+            <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="6">
+                    <Ellipse x:Name="LocalStatusIcon" Width="10" Height="10" Fill="Red" VerticalAlignment="Center" Margin="0,2,0,0"/>
+                    <TextBlock x:Name="LocalStatusText" Text="Disconnected" FontSize="14" Foreground="#a0a0a0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock x:Name="LocalDriverInfoText" Text="Waiting for game..." FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,2,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- CLASS FILTERS -->
+        <Border Grid.Row="1" CornerRadius="8" ClipToBounds="True" Background="#333" BorderBrush="#1b1b1b" BorderThickness="1" HorizontalAlignment="Center" Margin="0,0,0,25">
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Classes="flatToggle gt3" Content="GT3" GroupName="DetailsClassGroup" IsChecked="True" IsCheckedChanged="FilterClass_Checked"/>
+                <RadioButton Classes="flatToggle gte" Content="GTE" GroupName="DetailsClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                <RadioButton Classes="flatToggle lmp3" Content="LMP3" GroupName="DetailsClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                <RadioButton Classes="flatToggle lmp2" Content="LMP2" GroupName="DetailsClassGroup" IsCheckedChanged="FilterClass_Checked"/>
+                <RadioButton Classes="flatToggle hyp" Content="HYP" GroupName="DetailsClassGroup" BorderThickness="0" IsCheckedChanged="FilterClass_Checked"/>
+            </StackPanel>
+        </Border>
+
+        <!-- TABLE - COLUMN HEADERS -->
+        <Grid Grid.Row="2" Margin="35,0,60,10"> 
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="18*"/>
+                <ColumnDefinition Width="14*"/>
+                <ColumnDefinition Width="14*"/>
+                <ColumnDefinition Width="14*"/>
+                <ColumnDefinition Width="30*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Initials" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+            <TextBlock Grid.Column="1" Text="Laptime" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+            <TextBlock Grid.Column="2" Text="S1" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+            <TextBlock Grid.Column="3" Text="S2" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+            <TextBlock Grid.Column="4" Text="S3" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+            <TextBlock Grid.Column="5" Text="Car" FontWeight="Bold" Foreground="#888" FontSize="13"/>
+        </Grid>
+
+        <!-- TABLE - EXPANDED TIMES -->
+        <ScrollViewer Grid.Row="3" Margin="10,0,10,10">
+            <ItemsControl x:Name="LapTimesList">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="views:LapDetailItem">
+                        <Border Background="#222222" CornerRadius="6" BorderBrush="#333" BorderThickness="1" Margin="0,0,0,10" ClipToBounds="True" HorizontalAlignment="Stretch">
+                            <Grid>
+                                <Border Width="4" HorizontalAlignment="Left" Background="#4A148C" CornerRadius="6,0,0,6"/>
+                                
+                                <Expander Background="Transparent" Padding="0" Margin="10,0,0,0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                    <Expander.Header>
+                                        <Grid Margin="0,12,5,12" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="80"/>
+                                                <ColumnDefinition Width="18*"/>
+                                                <ColumnDefinition Width="14*"/>
+                                                <ColumnDefinition Width="14*"/>
+                                                <ColumnDefinition Width="14*"/>
+                                                <ColumnDefinition Width="30*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Grid.Column="0" Text="{Binding Initials}" FontSize="20" FontWeight="Bold" Foreground="#e4e4e4" VerticalAlignment="Center"/>
+                                            
+                                            <!-- Dynamically bound Foreground colors -->
+                                            <TextBlock Grid.Column="1" Text="{Binding LapTime}" FontSize="20" FontWeight="Bold" Foreground="{Binding LapTimeColor}" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding S1}" FontSize="17" FontWeight="SemiBold" Foreground="{Binding S1Color}" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding S2}" FontSize="17" FontWeight="SemiBold" Foreground="{Binding S2Color}" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="4" Text="{Binding S3}" FontSize="17" FontWeight="SemiBold" Foreground="{Binding S3Color}" VerticalAlignment="Center"/>
+                                            
+                                            <TextBlock Grid.Column="5" Text="{Binding Car}" FontSize="17" FontWeight="SemiBold" Foreground="#ccc" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                        </Grid>
+                                    </Expander.Header>
+                                    
+                                    <Border Background="#1a1a1a" BorderBrush="#333" BorderThickness="0,1,0,0" Padding="20">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0" Spacing="5">
+                                                <TextBlock Text="TIRES USED" Foreground="#7a7a7a" FontSize="12" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Tires}" Foreground="#e4e4e4" FontSize="16"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="1" Spacing="5">
+                                                <TextBlock Text="TRACK CONDITIONS" Foreground="#7a7a7a" FontSize="12" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Conditions}" Foreground="#e4e4e4" FontSize="16"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="2" Spacing="5">
+                                                <TextBlock Text="TEMPS (AIR/TRACK)" Foreground="#7a7a7a" FontSize="12" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Temps}" Foreground="#e4e4e4" FontSize="16"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="3" Spacing="5">
+                                                <TextBlock Text="SESSION DATE" Foreground="#7a7a7a" FontSize="12" FontWeight="Bold"/>
+                                                <TextBlock Text="{Binding Date}" Foreground="#e4e4e4" FontSize="16"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Expander>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
