@@ -1,4 +1,4 @@
 <Solution>
   <Project Path="RaceLogger.App/RaceLogger.App.csproj" />
-  <Project Path="RaceLogger.csproj" />
+  <Project Path="RaceLogger.Updater/RaceLogger.Updater.csproj" Id="150390ab-e867-4064-aacd-e5aae99ee31d" />
 </Solution>

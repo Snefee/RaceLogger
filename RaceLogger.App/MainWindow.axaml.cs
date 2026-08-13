@@ -52,11 +52,21 @@ namespace RaceLogger.App
         private int _pendingNavIndex = -1;
         private Dictionary<string, string> _carDatabase = new Dictionary<string, string>();
 
+        private readonly UpdateService _updateService = new UpdateService(); // OTA Update Service
+
+        private string _pendingZipUrl = null;
+        private string _pendingHashUrl = null;
+
         public MainWindow()
         {
             InitializeComponent();
             LoadSettings();
             LoadCarDatabase();
+
+            if (CurrentVersionText != null)
+            {
+                CurrentVersionText.Text = $"Current Version: {_updateService.CurrentVersion}";
+            }
 
             TrackDetailsControl.BackRequested += (s, e) =>
             {
@@ -998,7 +1008,73 @@ namespace RaceLogger.App
                 LogMessage($"[NETWORK ERROR] Could not connect to Google API: {ex.Message}");
             }
         }
-    }
+
+
+        // OTA UPDATER UI LOGIC
+        private async void CheckUpdatesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (CheckUpdatesBtn != null) CheckUpdatesBtn.IsEnabled = false;
+
+            UpdateModalTitle.Text = "Checking for Updates";
+            UpdateModalMessage.Text = "Please wait while we contact the server...";
+            UpdateModalStatus.Text = "";
+            UpdateModalDownloadBtn.IsVisible = false;
+            UpdateModalCancelBtn.IsVisible = false;
+            UpdateModalOkBtn.IsVisible = false;
+            UpdateModal.IsVisible = true;
+
+            var (isUpdateAvailable, latestVersion, zipUrl, hashUrl) = await _updateService.CheckForUpdatesAsync();
+
+            if (isUpdateAvailable)
+            {
+                _pendingZipUrl = zipUrl;
+                _pendingHashUrl = hashUrl;
+
+                UpdateModalTitle.Text = "Update Found!";
+                UpdateModalMessage.Text = $"Version {_updateService.CurrentVersion} -> {latestVersion}";
+
+                UpdateModalDownloadBtn.IsVisible = true;
+                UpdateModalCancelBtn.IsVisible = true;
+            }
+            else
+            {
+                UpdateModalTitle.Text = "Up to Date";
+                UpdateModalMessage.Text = "No updates found. You are on the latest version.";
+
+                UpdateModalOkBtn.IsVisible = true;
+            }
+        }
+
+        private async void UpdateModalDownloadBtn_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateModalDownloadBtn.IsVisible = false;
+            UpdateModalCancelBtn.IsVisible = false;
+            UpdateModalStatus.Text = "Downloading update... Please wait.";
+
+            bool success = await _updateService.DownloadAndPrepareUpdateAsync(_pendingZipUrl, _pendingHashUrl);
+
+            if (success)
+            {
+                UpdateModalStatus.Text = "Restarting to apply update...";
+                await Task.Delay(1500);
+                _updateService.LaunchUpdaterAndExit();
+            }
+            else
+            {
+                UpdateModalTitle.Text = "Error";
+                UpdateModalMessage.Text = "Failed to download update. Try again later.";
+                UpdateModalStatus.Text = "";
+                UpdateModalOkBtn.IsVisible = true;
+            }
+        }
+
+        private void UpdateModalClose_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateModal.IsVisible = false;
+            if (CheckUpdatesBtn != null) CheckUpdatesBtn.IsEnabled = true;
+        }
+
+    } // <-- MainWindow Class End
 
     public class AppSettings
     {
