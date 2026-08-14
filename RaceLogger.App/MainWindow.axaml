@@ -3,6 +3,7 @@
         xmlns:views="clr-namespace:RaceLogger.App.Views"
         x:Class="RaceLogger.App.MainWindow"
         Title="RaceLogger"
+        Icon="avares://RaceLogger.App/Assets/icon.ico"
         Width="1100" Height="700"
         MinWidth="900" MinHeight="600"
         Background="#1b1b1b"

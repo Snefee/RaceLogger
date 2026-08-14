@@ -7,4 +7,26 @@
     <Application.Styles>
         <FluentTheme />
     </Application.Styles>
+
+<TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="avares://RaceLogger.App/Assets/icon.ico" 
+                      ToolTipText="RaceLogger" 
+                      Clicked="TrayIcon_Clicked">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <!-- Non-clickable header -->
+                        <NativeMenuItem Header="RaceLogger" IsEnabled="False" />
+                        <!-- Visual separator line -->
+                        <NativeMenuItemSeparator />
+                        
+                        <!-- Clickable actions -->
+                        <NativeMenuItem Header="Open" Click="TrayIcon_Open_Clicked" />
+                        <NativeMenuItem Header="Exit" Click="TrayIcon_Exit_Clicked" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+
 </Application>
