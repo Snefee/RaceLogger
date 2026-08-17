@@ -127,35 +127,31 @@ namespace RaceLogger.App.Services
         // Exit the app and launch the separate updater
         public void LaunchUpdaterAndExit()
         {
-            string updaterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _updaterExeName);
+            string updaterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "RaceLogger.Updater.exe");
 
-            if (!File.Exists(updaterPath))
+            // TrimEnd('\\') is CRUCIAL here. It prevents Windows from escaping the closing quote when passing directory paths as arguments
+            string updateCache = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UpdateCache").TrimEnd('\\');
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');
+
+            string exeName = AppDomain.CurrentDomain.FriendlyName;
+            if (!exeName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase))
             {
-                Debug.WriteLine($"[OTA FATAL] Updater executable not found at: {updaterPath}");
-                return;
+                exeName += ".exe";
             }
 
-            int currentPid = Environment.ProcessId;
-            string mainAppFolder = AppDomain.CurrentDomain.BaseDirectory;
-            string mainExeName = AppDomain.CurrentDomain.FriendlyName + ".exe"; // ex. RaceLogger.App.exe
+            // Build the arguments string
+            string arguments = $"{Environment.ProcessId} \"{updateCache}\" \"{baseDir}\" \"{exeName}\"";
 
-            // Constructing arguments for the updater
-            // args[0] = PID
-            // args[1] = UpdateCache folder
-            // args[2] = Main app folder
-            // args[3] = Main exe name
-            string arguments = $"\"{currentPid}\" \"{_updateCacheFolder}\" \"{mainAppFolder}\" \"{mainExeName}\"";
-
-            Debug.WriteLine($"[OTA] Launching Updater: {updaterPath} {arguments}");
-
-            Process.Start(new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 FileName = updaterPath,
-                Arguments = arguments,
-                UseShellExecute = true
-            });
+                UseShellExecute = true,
+                Arguments = arguments
+            };
 
-            // Exit main application to allow the updater to replace files
+            Process.Start(startInfo);
+
+            // Shut down the main app to release file locks
             Environment.Exit(0);
         }
     }

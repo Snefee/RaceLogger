@@ -7,7 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
     <DefaultItemExcludes>$(DefaultItemExcludes);RaceLogger.Updater\**;RaceLogger.Update\**;..\RaceLogger.Updater\**;..\RaceLogger.Update\**</DefaultItemExcludes>
-    <Version>0.2.3</Version>
+    <Version>0.2.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,4 +36,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!-- AUTOMATIC UPDATER PUBLISHING -->
+  <Target Name="PublishCompanionUpdater" AfterTargets="Publish">
+    <Message Text="[BUILD] Publishing RaceLogger.Updater to the main output directory..." Importance="high" />
+    <Exec Command="dotnet publish ..\RaceLogger.Updater\RaceLogger.Updater.csproj -c $(Configuration) -f $(TargetFramework) -r win-x64 --self-contained false -o &quot;$(PublishDir)\&quot;" />
+  </Target>
 </Project>

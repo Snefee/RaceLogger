@@ -18,12 +18,10 @@ namespace RaceLogger.Updater
         public MainWindow()
         {
             InitializeComponent();
-        }
 
-        public MainWindow(string[] args)
-        {
-            InitializeComponent();
-            _args = args;
+            // Fetch arguments directly from the OS
+            var rawArgs = Environment.GetCommandLineArgs();
+            _args = rawArgs.Length > 1 ? rawArgs.Skip(1).ToArray() : Array.Empty<string>();
 
             // Start the update process on a background thread so the UI does not freeze
             Task.Run(() => PerformUpdateAsync());
@@ -64,7 +62,7 @@ namespace RaceLogger.Updater
             if (_args == null || _args.Length < 4)
             {
                 LogMessage("[ERROR] Missing arguments. Updater must be launched by the main application.");
-                await Task.Delay(3000);
+                await Task.Delay(10000); // 10 seconds to read the debug logs
                 Environment.Exit(1);
                 return;
             }
@@ -78,7 +76,7 @@ namespace RaceLogger.Updater
             {
                 LogMessage($"[SYSTEM] Waiting for main application (PID: {targetPid}) to exit...");
 
-                // Wait for the main application to close and release file locks (10 seconds timeout)
+                // Wait for the main application to close and release file locks
                 try
                 {
                     var raceLoggerProcess = Process.GetProcessById(targetPid);
@@ -89,7 +87,23 @@ namespace RaceLogger.Updater
                 await Task.Delay(500); // Extra buffer to ensure Windows OS drops the file locks
                 LogMessage("[SYSTEM] Main application closed. Initializing update sequence...");
 
-                // Process file copying with UI progress
+                // CLEANUP - Remove old backup files from previous updates
+                LogMessage("[SYSTEM] Cleaning up legacy files from previous updates...");
+                try
+                {
+                    var oldBackups = Directory.GetFiles(destinationFolder, "*.old", SearchOption.AllDirectories);
+                    foreach (var oldFile in oldBackups)
+                    {
+                        try { File.Delete(oldFile); }
+                        catch { /* Ignore if it still cannot be deleted */ }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogMessage($"[WARNING] Failed to clean up old files: {ex.Message}");
+                }
+
+                // COPY - Process file copying with rename workaround
                 if (Directory.Exists(updateTempFolder))
                 {
                     var allFiles = Directory.GetFiles(updateTempFolder, "*.*", SearchOption.AllDirectories);
@@ -110,22 +124,42 @@ namespace RaceLogger.Updater
                             Directory.CreateDirectory(targetDir);
                         }
 
-                        // Copy and overwrite the file
-                        File.Copy(sourceFile, destinationFile, true);
-                        copiedFiles++;
+                        // Try to copy and overwrite. If it's locked by the Updater itself, rename it first
+                        try
+                        {
+                            File.Copy(sourceFile, destinationFile, true);
+                        }
+                        catch (IOException)
+                        {
+                            LogMessage($"[WARNING] File locked, applying rename workaround: {relativePath}");
+                            string backupFile = destinationFile + ".old";
 
-                        LogMessage($"Copying: {relativePath}");
+                            if (File.Exists(backupFile))
+                            {
+                                try { File.Delete(backupFile); } catch { }
+                            }
+
+                            if (File.Exists(destinationFile))
+                            {
+                                File.Move(destinationFile, backupFile);
+                            }
+
+                            File.Copy(sourceFile, destinationFile, true);
+                        }
+
+                        copiedFiles++;
+                        LogMessage($"Updated: {relativePath}");
 
                         // Update the progress bar
                         int progress = (int)((copiedFiles / (double)totalFiles) * 100);
                         UpdateProgress(progress);
 
-                        // Tiny delay to ensure smooth UI rendering for small and quick file copies
+                        // Tiny delay to ensure smooth UI rendering
                         await Task.Delay(10);
                     }
 
                     LogMessage("[SYSTEM] All files updated successfully.");
-                    LogMessage("[SYSTEM] Cleaning up temporary update cache...");
+                    LogMessage("[SYSTEM] Deleting temporary update cache...");
                     Directory.Delete(updateTempFolder, true);
                 }
                 else
@@ -139,7 +173,7 @@ namespace RaceLogger.Updater
                 LogMessage("[SYSTEM] Update complete! Relaunching application...");
                 await Task.Delay(1000); // Give the user a second to see 100% completion
 
-                // Run the newly updated main executable
+                // LAUNCH - Run the newly updated main executable
                 string newExePath = Path.Combine(destinationFolder, executableName);
                 if (File.Exists(newExePath))
                 {
