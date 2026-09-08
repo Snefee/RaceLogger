@@ -26,7 +26,7 @@ namespace RaceLogger.App
 {
     public partial class MainWindow : Window
     {
-        private bool _isLogging = false;
+        private readonly TelemetryService _telemetryService = new TelemetryService();
         private static readonly HttpClient client = new HttpClient();
 
         private readonly LeaderboardService _leaderboardService = new LeaderboardService();
@@ -74,8 +74,54 @@ namespace RaceLogger.App
                 RefreshLeaderboardAsync(forceDownload: false);
             };
 
-            _isLogging = true;
-            Task.Run(() => TelemetryLoop());
+            _telemetryService.OnLogMessage += (s, msg) => LogMessage(msg);
+
+            _telemetryService.OnConnectionStatusChanged += (s, args) =>
+            {
+                var color = args.isConnected ? Brushes.LimeGreen : Brushes.Red;
+                UpdateConnectionUI(color, args.status, args.driverInfo);
+            };
+
+            _telemetryService.OnLapCompleted += TelemetryService_OnLapCompleted;
+            _telemetryService.OnLiveTelemetryUpdated += TelemetryService_OnLiveTelemetryUpdated;
+
+            _telemetryService.Start();
+        }
+
+        private void TelemetryService_OnLiveTelemetryUpdated(object? sender, LiveTelemetryArgs e)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (TelemetryView == null || !TelemetryView.IsVisible) return;
+
+                string gearStr = e.Gear == 0 ? "N" : e.Gear == -1 ? "R" : e.Gear.ToString();
+
+                if (LiveRpmText != null) LiveRpmText.Text = $"{e.RPM:F0}";
+                if (LiveGearText != null) LiveGearText.Text = gearStr;
+                if (LiveThrottleText != null) LiveThrottleText.Text = $"{e.ThrottlePct:F0}";
+                if (LiveBrakeText != null) LiveBrakeText.Text = $"{e.BrakePct:F0}";
+                if (LiveSpeedText != null) LiveSpeedText.Text = $"{e.SpeedKmh:F0}";
+
+                if (LiveTireTempText != null)
+                    LiveTireTempText.Text = $"{e.TireTemps[0]:F0} | {e.TireTemps[1]:F0} | {e.TireTemps[2]:F0} | {e.TireTemps[3]:F0}";
+
+                if (LiveTirePressureText != null)
+                    LiveTirePressureText.Text = $"{e.TirePressures[0]:F1} | {e.TirePressures[1]:F1} | {e.TirePressures[2]:F1} | {e.TirePressures[3]:F1}";
+
+                if (LiveTireStateText != null)
+                    LiveTireStateText.Text = $"{e.TireLife[0]:F0} | {e.TireLife[1]:F0} | {e.TireLife[2]:F0} | {e.TireLife[3]:F0}";
+
+                if (LiveBrakeTempText != null)
+                    LiveBrakeTempText.Text = $"{e.BrakeTemps[0]:F0} | {e.BrakeTemps[1]:F0} | {e.BrakeTemps[2]:F0} | {e.BrakeTemps[3]:F0}";
+
+                if (LiveSteeringText != null) LiveSteeringText.Text = $"{e.SteeringDegrees:F1}";
+                if (LiveOilTempText != null) LiveOilTempText.Text = $"{e.OilTemp:F0}";
+                if (LiveWaterTempText != null) LiveWaterTempText.Text = $"{e.WaterTemp:F0}";
+
+                if (LiveFuelText != null) LiveFuelText.Text = $"{e.FuelLiters:F1} ({(e.FuelLiters / e.FuelCapacity * 100):F0}%)";
+
+                if (LivePositionText != null) LivePositionText.Text = $"X: {e.PosX:F1} | Z: {e.PosZ:F1}";
+            });
         }
 
         private void LogMessage(string message)
@@ -270,7 +316,7 @@ namespace RaceLogger.App
             }
             else
             {
-                _isLogging = false;
+                _telemetryService.Stop();
                 base.OnClosing(e);
             }
         }
@@ -558,6 +604,10 @@ namespace RaceLogger.App
             {
                 targetView = DashboardView;
             }
+            else if (MainNavList.SelectedIndex == 1)
+            {
+                targetView = TelemetryView;
+            }
             else if (MainNavList.SelectedIndex == 2)
             {
                 if (string.IsNullOrWhiteSpace(_loadedWebhookUrl))
@@ -618,6 +668,7 @@ namespace RaceLogger.App
         private void NavigateTo(Control viewToShow, ListBox listToHighlight, int highlightIndex)
         {
             if (DashboardView != null) DashboardView.IsVisible = false;
+            if (TelemetryView != null) TelemetryView.IsVisible = false;
             if (LeaderboardView != null) LeaderboardView.IsVisible = false;
             if (SettingsView != null) SettingsView.IsVisible = false;
             if (DevConsoleView != null) DevConsoleView.IsVisible = false;
@@ -750,135 +801,23 @@ namespace RaceLogger.App
             });
         }
 
-        private void TelemetryLoop()
+        private void TelemetryService_OnLapCompleted(object? sender, LapCompletedArgs e)
         {
-            LogMessage("========================================");
-            LogMessage("               RaceLogger               ");
-            LogMessage("========================================");
-            LogMessage("[SYSTEM] Logger initialized. Auto-connecting...");
+            string carModel = GetBaseCarModel(e.RawLiveryName, e.CarClass);
+            string session = GetSessionType(e.SessionIndex);
 
-            int lastLapCount = -1;
-            bool currentLapValid = true;
+            double actualS1 = e.Sector1 > 0 ? e.Sector1 : 0;
+            double actualS2 = (e.Sector2 > 0 && e.Sector1 > 0) ? (e.Sector2 - e.Sector1) : 0;
+            double actualS3 = (e.LapTime > 0 && e.Sector2 > 0) ? (e.LapTime - e.Sector2) : 0;
 
-            while (_isLogging)
-            {
-                try
-                {
-                    using (var mappedFile = MemoryMappedFile.OpenExisting(rFactor2Constants.MM_SCORING_FILE_NAME))
-                    using (var accessor = mappedFile.CreateViewAccessor())
-                    {
-                        rF2Scoring scoring = ReadSharedMemory<rF2Scoring>(accessor);
+            string lapTimeStr = FormatTime(e.LapTime);
+            string s1Str = FormatTime(actualS1);
+            string s2Str = FormatTime(actualS2);
+            string s3Str = FormatTime(actualS3);
 
-                        for (int i = 0; i < scoring.mScoringInfo.mNumVehicles; i++)
-                        {
-                            var vehicle = scoring.mVehicles[i];
+            LogMessage($"[LAP RECORDED] {lapTimeStr} on {e.Track} (Valid)");
 
-                            if (vehicle.mIsPlayer == 1)
-                            {
-                                if (lastLapCount == -1)
-                                {
-                                    lastLapCount = vehicle.mTotalLaps;
-                                    currentLapValid = (vehicle.mCountLapFlag != 0);
-                                    string driverName = ParseByteArray(vehicle.mDriverName);
-
-                                    UpdateConnectionUI(Brushes.LimeGreen, "Connected", $"LMU - {driverName}");
-                                    LogMessage($"[SYSTEM] Connected! Driver: {driverName}.");
-                                }
-                                else if (vehicle.mTotalLaps < lastLapCount)
-                                {
-                                    LogMessage("[SYSTEM] Session reset or track change detected. Resetting telemetry...");
-                                    lastLapCount = vehicle.mTotalLaps;
-                                    currentLapValid = (vehicle.mCountLapFlag != 0);
-                                }
-                                else if (vehicle.mTotalLaps > lastLapCount)
-                                {
-                                    bool wasLapValid = currentLapValid && vehicle.mLastLapTime > 0;
-                                    lastLapCount = vehicle.mTotalLaps;
-                                    currentLapValid = (vehicle.mCountLapFlag != 0);
-
-                                    string track = ParseByteArray(scoring.mScoringInfo.mTrackName);
-                                    string lapTimeStr = FormatTime(vehicle.mLastLapTime);
-
-                                    if (wasLapValid)
-                                    {
-                                        string driver = ParseByteArray(vehicle.mDriverName);
-                                        string carClass = ParseByteArray(vehicle.mVehicleClass);
-                                        string rawLiveryName = ParseByteArray(vehicle.mVehicleName);
-                                        string carModel = GetBaseCarModel(rawLiveryName, carClass);
-                                        string session = GetSessionType(scoring.mScoringInfo.mSession);
-
-                                        double rawS1 = vehicle.mLastSector1;
-                                        double rawS2 = vehicle.mLastSector2;
-                                        double rawLap = vehicle.mLastLapTime;
-
-                                        double actualS1 = rawS1 > 0 ? rawS1 : 0;
-                                        double actualS2 = (rawS2 > 0 && rawS1 > 0) ? (rawS2 - rawS1) : 0;
-                                        double actualS3 = (rawLap > 0 && rawS2 > 0) ? (rawLap - rawS2) : 0;
-
-                                        string s1Str = FormatTime(actualS1);
-                                        string s2Str = FormatTime(actualS2);
-                                        string s3Str = FormatTime(actualS3);
-
-                                        LogMessage($"[LAP RECORDED] {lapTimeStr} on {track} (Valid)");
-
-                                        _ = SendLapDataAsync(track, driver, carClass, carModel, lapTimeStr, s1Str, s2Str, s3Str, session, "LMU");
-                                    }
-                                    else
-                                    {
-                                        LogMessage($"[LAP RECORDED] {lapTimeStr} on {track} -> Invalid lap or out-lap. Ignored.");
-                                    }
-                                }
-                                else
-                                {
-                                    if (vehicle.mCountLapFlag == 0 && currentLapValid)
-                                    {
-                                        currentLapValid = false;
-                                        LogMessage("[WARNING] Track limits exceeded! Current lap invalidated.");
-                                    }
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-                catch (FileNotFoundException)
-                {
-                    if (lastLapCount != -1)
-                    {
-                        UpdateConnectionUI(Brushes.Red, "Disconnected", "Waiting for game...");
-                        lastLapCount = -1;
-                    }
-                }
-                catch (Exception)
-                {
-                }
-
-                Thread.Sleep(200);
-            }
-        }
-
-        static T ReadSharedMemory<T>(MemoryMappedViewAccessor accessor)
-        {
-            int size = Marshal.SizeOf(typeof(T));
-            byte[] bytes = new byte[size];
-            accessor.ReadArray(0, bytes, 0, size);
-
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            try
-            {
-                Marshal.Copy(bytes, 0, ptr, size);
-                return (T)Marshal.PtrToStructure(ptr, typeof(T));
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(ptr);
-            }
-        }
-
-        static string ParseByteArray(byte[] bytes)
-        {
-            return Encoding.Default.GetString(bytes).Split('\0')[0];
+            _ = SendLapDataAsync(e.Track, e.Driver, e.CarClass, carModel, lapTimeStr, s1Str, s2Str, s3Str, session, "LMU");
         }
 
         static string FormatTime(double timeSeconds)

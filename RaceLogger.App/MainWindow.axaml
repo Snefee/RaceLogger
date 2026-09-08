@@ -284,7 +284,9 @@
                     <!-- VIEWS CONTAINER -->
                     <Grid Grid.Row="1" Margin="0,20,0,0">
                         
-                        <!-- DASHBOARD VIEW -->
+                        <!-- ============================== -->
+                        <!-- DASHBOARD VIEW                 -->
+                        <!-- ============================== -->
                         <Grid x:Name="DashboardView" IsVisible="True">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -309,7 +311,42 @@
                             </StackPanel>
                         </Grid>
 
+                        <!-- ============================== -->
+                        <!-- TELEMETRY VIEW PAGE            -->
+                        <!-- ============================== -->
+                        <Grid x:Name="TelemetryView" IsVisible="False" Margin="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
+                            <StackPanel Grid.Column="0" Spacing="10" Margin="20,0,0,0" VerticalAlignment="Center">
+                                <TextBlock Text="Telemetry" FontSize="32" Margin="0,0,0,20"/>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="RPM - "/><TextBlock x:Name="LiveRpmText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Gear - "/><TextBlock x:Name="LiveGearText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Throttle (%) - "/><TextBlock x:Name="LiveThrottleText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Brake (%) - "/><TextBlock x:Name="LiveBrakeText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Speed (km/h) - "/><TextBlock x:Name="LiveSpeedText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Tire temp (C) FL|FR|RL|RR - "/><TextBlock x:Name="LiveTireTempText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Tire Pressure (kPa) FL|FR|RL|RR - "/><TextBlock x:Name="LiveTirePressureText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Tire state (%) FL|FR|RL|RR - "/><TextBlock x:Name="LiveTireStateText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Brake temp (C) FL|FR|RL|RR - "/><TextBlock x:Name="LiveBrakeTempText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Steering Wheel Rotation - "/><TextBlock x:Name="LiveSteeringText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Oil Temp (C) - "/><TextBlock x:Name="LiveOilTempText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Water Temp (C) - "/><TextBlock x:Name="LiveWaterTempText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Fuel (L &amp; %) - "/><TextBlock x:Name="LiveFuelText" Foreground="#a900ff" FontWeight="Bold"/></StackPanel>
+                                <StackPanel Orientation="Horizontal"><TextBlock Text="Position - "/><TextBlock x:Name="LivePositionText" Foreground="#a0a0a0"/></StackPanel>
+                            </StackPanel>
+
+                            <Border Grid.Column="1" Background="#2a2a2a" CornerRadius="12" Margin="20" ClipToBounds="True">
+                                <Canvas x:Name="TrackMapCanvas" Background="Transparent">
+                                    <!-- SPA only for testing purposes, later replace with the actual track -->
+                                    <Path Data="{StaticResource TrackSpa}" Stroke="#e4e4e4" StrokeThickness="4" StrokeLineCap="Round" Stretch="Uniform" Width="400" Height="400" Canvas.Left="30" Canvas.Top="30"/>
+                                    <!-- Player postion on track -->
+                                    <Ellipse x:Name="LivePlayerDot" Width="16" Height="16" Fill="#D32F2F" Canvas.Left="200" Canvas.Top="200"/>
+                                </Canvas>
+                            </Border>
+                        </Grid>
 
                         <!-- ============================== -->
                         <!-- LEADERBOARD VIEW PAGE -->
