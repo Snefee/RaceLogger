@@ -28,7 +28,7 @@ A Windows desktop companion for Le Mans Ultimate: live telemetry dashboard, lap 
 
 1. Download the latest release from the Releases page (or build from source below).
 2. Install the shared memory plugin: download `rFactor2SharedMemoryMapPlugin64.dll` from the [plugin's repository](https://github.com/TheIronWolfModding/rF2SharedMemoryMapPlugin) and copy it into the `Plugins` folder of your Le Mans Ultimate installation (create the folder if it doesn't exist).
-3. Create a Google Sheet and webhook that receives laps: [step by step tutorial link] <!-- MAKE A TUTORIAL AND ADD A LINK HERE -->.
+3. Set up the Google Sheet and webhook that receives your laps: follow the [Google Sheets setup guide](docs/google-sheets-setup.md).
 4. Open **Settings**, paste the webhook URL and press **Save & Sync**.
 5. Start Le Mans Ultimate. The dashboard connects automatically.
 
@@ -42,10 +42,9 @@ dotnet run --project RaceLogger.App
 
 Requires the .NET 10 SDK and Windows.
 
-## Data sent to your sheet
+## Data & Privacy
 
-Track, driver, class, car, lap time, sector times, session, tyres, conditions, temperatures, date and game.
-Nothing is sent anywhere else.
+Lap data (track, driver, class, car, lap time, sector times, session, game and date) is sent only to the Google Sheets webhook you configure. The app also contacts GitHub to check for updates.
 
 ## Credits
 
@@ -53,3 +52,7 @@ Nothing is sent anywhere else.
 by The Iron Wolf.
 
 Unofficial hobby project, not affiliated with the developers of Le Mans Ultimate.
+
+## License
+
+RaceLogger is licensed under the [GNU General Public License v3.0](LICENSE).
