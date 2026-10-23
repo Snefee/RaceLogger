@@ -1,0 +1,32 @@
+﻿<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="RaceLogger.App.App"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+<TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="avares://RaceLogger.App/Assets/icon.ico" 
+                      ToolTipText="RaceLogger" 
+                      Clicked="TrayIcon_Clicked">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <!-- Non-clickable header -->
+                        <NativeMenuItem Header="RaceLogger" IsEnabled="False" />
+                        <!-- Visual separator line -->
+                        <NativeMenuItemSeparator />
+                        
+                        <!-- Clickable actions -->
+                        <NativeMenuItem Header="Open" Click="TrayIcon_Open_Clicked" />
+                        <NativeMenuItem Header="Exit" Click="TrayIcon_Exit_Clicked" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+
+</Application>

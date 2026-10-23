@@ -1,0 +1,366 @@
+{
+  // ====================
+  // 2023 WEC
+  // ====================
+
+  // =====
+  // GT3
+  // =====
+
+  // Porsche
+  "Proton Competition #16": "Porsche 911 RSR-19",
+  "Project 1 - AO #56": "Porsche 911 RSR-19",
+  "Iron Lynx #60": "Porsche 911 RSR-19",
+  "Dempsey-Proton Racing #77": "Porsche 911 RSR-19",
+  "Iron Dames #85": "Porsche 911 RSR-19",
+  "GR Racing #86": "Porsche 911 RSR-19",
+  "Proton Competition #88": "Porsche 911 RSR-19",
+  "Proton Competition #911": "Porsche 911 RSR-19",
+
+  // Ferrari
+  "AF Corse #21": "Ferrari 488 GTE Evo",
+  "AF Corse #54": "Ferrari 488 GTE Evo",
+  "Kessel Racing #57": "Ferrari 488 GTE Evo",
+  "JMW Motorsport #66": "Ferrari 488 GTE Evo",
+  "Kessel Racing #74": "Ferrari 488 GTE Evo",
+  "AF Corse #83": "Ferrari 488 GTE Evo",
+  "Walkenhorst Motorsport #100": "Ferrari 488 GTE Evo",
+
+  // Corvette
+  "Corvette Racing #33": "Chevrolet Corvette C8.R",
+
+  // Aston Martin
+  "ORT by TF #25": "Aston Martin Vantage AMR",
+  "GMB Motorsport #55": "Aston Martin Vantage AMR",
+  "TF Sport #72": "Aston Martin Vantage AMR",
+  "The Heart of Racing #98": "Aston Martin Vantage AMR",
+  "D'Station Racing #777": "Aston Martin Vantage AMR",
+  "Northwest AMR #98": "Aston Martin Vantage AMR",
+
+
+
+  // =====
+  // LMP2
+  // =====
+
+  "Prema Racing #9": "Oreca 07",
+  "Vector Sport #10": "Oreca 07",
+  "Tower Motorsports #13": "Oreca 07",
+  "Nielsen Racing #14": "Oreca 07",
+  "United Autosports #22": "Oreca 07",
+  "United Autosports #23": "Oreca 07",
+  "JOTA #28": "Oreca 07",
+  "Duqueine Team #30": "Oreca 07",
+  "Team WRT #31": "Oreca 07",
+  "Inter Europol Competition #32": "Oreca 07",
+  "Inter Europol Competition #34": "Oreca 07",
+  "Alpine Elf Team #35": "Oreca 07",
+  "Alpine Elf Team #36": "Oreca 07",
+  "Cool Racing #37": "Oreca 07",
+  "Graff Racing #39": "Oreca 07",
+  "Team WRT #41": "Oreca 07",
+  "DKR Engineering #43": "Oreca 07",
+  "Algarve Pro Racing #45": "Oreca 07",
+  "Cool Racing #47": "Oreca 07",
+  "IDEC Sport #48": "Oreca 07",
+  "Prema Racing #63": "Oreca 07",
+  "Panis Racing #65": "Oreca 07",
+  "AF Corse #80": "Oreca 07",
+  "Racing Team Turkey #923": "Oreca 07",
+  "JOTA #48": "Oreca 07",
+
+
+
+  // =====
+  // HYPERCAR
+  // =====
+
+  // Vanwall
+  "Floyd Vanwall Racing Team #4": "Vanwall 680",
+
+  // Toyota
+  "Toyota Gazoo Racing #7": "Toyota GR010",
+  "Toyota Gazoo Racing #8": "Toyota GR010",
+
+  // Porsche
+  "Porsche Penske Motorsport #5": "Porsche 963",
+  "Porsche Penske Motorsport #6": "Porsche 963",
+  "Hertz Team Jota #38": "Porsche 963",
+  "Porsche Penske Motorsport #75": "Porsche 963",
+  "Proton Competition #99": "Porsche 963",
+
+  // Peugeot
+  "Peugeot TotalEnergies #93": "Peugeot 9X8",
+  "Peugeot TotalEnergies #94": "Peugeot 9X8",
+
+  // Glickenhaus
+  "Glickenhaus Racing #708": "Glickenhaus SCG007",
+  "Glickenhaus Racing #709": "Glickenhaus SCG007",
+
+  // Ferrari
+  "Ferrari AF Corse #50": "Ferrari 499P",
+  "Ferrari AF Corse #51": "Ferrari 499P",
+
+  // Cadillac
+  "Cadillac Racing #2": "Cadillac V-Series.R",
+  "Cadillac Racing #3": "Cadillac V-Series.R",
+  "Action Express Racing #311": "Cadillac V-Series.R",
+
+
+
+
+
+  // ====================
+  // 2024 WEC
+  // ====================
+
+  // =====
+  // GT3
+  // =====
+
+  // Porsche
+  "Manthey EMA 2024 #91": "Porsche 911 GT3 R LMGT3",
+  "Manthey Purerxcing 2024 #92": "Porsche 911 GT3 R LMGT3",
+
+  // Mclaren
+  "United Autosports 2024 #59": "McLaren 720S LMGT3 EVO",
+  "Inception Racing 2024 #70": "McLaren 720S LMGT3 EVO",
+  "United Autosports 2024 #95": "McLaren 720S LMGT3 EVO",
+
+  // Lexus
+  "Akkodis ASP Team 2024 #78": "Lexus RCF LMGT3",
+  "Akkodis ASP Team 2024 #87": "Lexus RCF LMGT3",
+
+  // Lamborghini
+  "Iron Lynx 2024 #60": "Lamborghini Huracan LMGT3 EVO2",
+  "Iron Dames 2024 #85": "Lamborghini Huracan LMGT3 EVO2",
+
+  // Ford
+  "Proton Racing 2024 #44": "Ford Mustang LMGT3",
+  "Proton Racing 2024 #77": "Ford Mustang LMGT3",
+  "Proton Racing 2024 #88": "Ford Mustang LMGT3",
+
+  // Ferrari
+  "Vista AF Corse 2024 #54": "Ferrari 296 LMGT3",
+  "Vista AF Corse 2024 #55": "Ferrari 296 LMGT3",
+  "JMW Motorsport 2024 2024 #66": "Ferrari 296 LMGT3",
+  "GR Racing 2024 #86": "Ferrari 296 LMGT3",
+  "Spirit of Race 2024 #155": "Ferrari 296 LMGT3",
+
+  // Corvette
+  "TF Sport #81": "Chevrolet Corvette Z06 LMGT3.R",
+  "TF Sport #82": "Chevrolet Corvette Z06 LMGT3.R",
+
+  // BMW
+  "Team WRT 2024 #31": "BMW M4 LMGT3",
+  "Team WRT 2024 #46": "BMW M4 LMGT3",
+
+  // Aston Martin
+  "Heart of Racing Team 2024 #27": "Aston Martin Vantage AMR LMGT3",
+  "D'Station Racing 2024 #777": "Aston Martin Vantage AMR LMGT3",
+
+
+
+  // =====
+  // LMP2
+  // =====
+
+  "Proton Competition 2024 #9": "Oreca 07",
+  "Vector Sport 2024 #10": "Oreca 07",
+  "AO By TF 2024 #14": "Oreca 07",
+  "United Autosports 2024 #22": "Oreca 07",
+  "United Autosports USA 2024 #23": "Oreca 07",
+  "Nielsen Racing 2024 #24": "Oreca 07",
+  "Algarve Pro Racing 2024 #25": "Oreca 07",
+  "IDEC Sport 2024 #28": "Oreca 07",
+  "Duqueine Team 2024 #30": "Oreca 07",
+  "DKR Engineering 2024 #33": "Oreca 07",
+  "Inter Europol Competition 2024 #34": "Oreca 07",
+  "Cool Racing 2024 #37": "Oreca 07",
+  "CrowdStrike Racing By APR 2024 #45": "Oreca 07",
+  "Cool Racing 2024 #47": "Oreca 07",
+  "Panis Racing 2024 #65": "Oreca 07",
+  "AF Corse 2024 #183": "Oreca 07",
+
+
+
+  // =====
+  // HYPERCAR
+  // =====
+
+  // Toyota
+  "Toyota Gazoo Racing 2024 #7": "Toyota GR010",
+  "Toyota Gazoo Racing 2024 #8": "Toyota GR010",
+
+  // Porsche
+  "Porsche Penske Motorsport 2024 #4": "Porsche 963",
+  "Porsche Penske Motorsport 2024 #5": "Porsche 963",
+  "Porsche Penske Motorsport 2024 #6": "Porsche 963",
+  "Hertz Team Jota 2024 #12": "Porsche 963",
+  "Hertz Team Jota 2024 #38": "Porsche 963",
+  "Proton Competition 2024 #99": "Porsche 963",
+
+  // Peugeot
+  "Peugeot TotalEnergies 2024 #93": "Peugeot 9X8",
+  "Peugeot TotalEnergies 2024 #94": "Peugeot 9X8",
+
+  // Lamborghini
+  "Lamborghini Iron Lynx 2024 #19": "Lamborghini SC63",
+  "Lamborghini Iron Lynx 2024 #63": "Lamborghini SC63",
+
+  // Isotta Fraschini
+  "Isotta Tipo6 2024 #11": "Isotta Fraschini Tipo 6",
+
+  // Ferrari
+  "Ferrari AF Corse 2024 #50": "Ferrari 499P",
+  "Ferrari AF Corse 2024 #51": "Ferrari 499P",
+  "Ferrari AF Corse 2024 #83": "Ferrari 499P",
+
+  // Cadillac
+  "Cadillac Racing 2024 #2": "Cadillac V-Series.R",
+  "Cadillac Racing 2024 #3": "Cadillac V-Series.R",
+  "Whelen Cadillac Racing 2024 #311": "Cadillac V-Series.R",
+
+  // BMW
+  "BMW M Team WRT 2024 #15": "BMW M Hybrid V8",
+  "BMW M Team WRT 2024 #20": "BMW M Hybrid V8",
+
+  // Alpine
+  "Alpine Endurance Team 2024 #35": "Alpine A424",
+  "Alpine Endurance Team 2024 #36": "Alpine A424",
+
+
+
+
+
+  // ====================
+  // 2025 WEC
+  // ====================
+
+  // =====
+  // GT3
+  // =====
+
+  // Porsche
+  "Iron Dames 2025 #85": "Porsche 911 GT3 R LMGT3",
+  "Manthey 2025 #90": "Porsche 911 GT3 R LMGT3",
+  "Manthey 1st Phorm 2025 #92": "Porsche 911 GT3 R LMGT3",
+
+  // Mercedes
+  "Iron Lynx 2025 #60": "Mercedes-AMG LMGT3",
+  "Iron Lynx 2025 #61": "Mercedes-AMG LMGT3",
+  "Iron Lynx 2025 #63": "Mercedes-AMG LMGT3",
+
+  // McLaren
+  "United Autosports 2025 #59": "McLaren 720S LMGT3 EVO",
+  "United Autosports 2025 #95": "McLaren 720S LMGT3 EVO",
+
+  // Lexus
+  "Akkodis ASP Team 2025 #78": "Lexus RCF LMGT3",
+  "Akkodis ASP Team 2025 #87": "Lexus RCF LMGT3",
+
+  // Ford
+  "Proton Competition 2025 #77": "Ford Mustang LMGT3",
+  "Proton Competition 2025 #88": "Ford Mustang LMGT3",
+
+  // Ferrari
+  "Vista AF Corse 2025 #21": "Ferrari 296 LMGT3",
+  "Vista AF Corse 2025 #54": "Ferrari 296 LMGT3",
+  "Kessel Racing 2025 #57": "Ferrari 296 LMGT3",
+  "Richard Mille AF Corse 2025 #150": "Ferrari 296 LMGT3",
+  "Ziggo Sport Tempesta 2025 #193": "Ferrari 296 LMGT3",
+
+  // Corvette
+  "AWA Racing 2025 #13": "Chevrolet Corvette Z06 LMGT3.R",
+  "TF Sport 2025 #33": "Chevrolet Corvette Z06 LMGT3.R",
+  "TF Sport 2025 #81": "Chevrolet Corvette Z06 LMGT3.R",
+
+  // BMW
+  "The Bend Team WRT 2025 #31": "BMW M4 LMGT3",
+  "Team WRT 2025 #46": "BMW M4 LMGT3",
+
+  // Aston Martin
+  "Racing Spirit Of Leman 2025 #10": "Aston Martin Vantage AMR LMGT3",
+  "Heart Of Racing Team 2025 #27": "Aston Martin Vantage AMR LMGT3",
+
+
+
+  // =====
+  // LMP2
+  // =====
+
+  "Iron Lynx - Proton 2025 #9": "Oreca 07",
+  "Proton Competition 2025 #11": "Oreca 07",
+  "RLR MSport 2025 #16": "Oreca 07",
+  "IDEC Sport 2025 #18": "Oreca 07",
+  "United Autosports 2025 #22": "Oreca 07",
+  "United Autosports 2025 #23": "Oreca 07",
+  "Nielsen Racing 2025 #24": "Oreca 07",
+  "Algarve Pro Racing 2025 #25": "Oreca 07",
+  "IDEC Sport 2025 #28": "Oreca 07",
+  "TDS Racing 2025 #29": "Oreca 07",
+  "Inter Europol Competition 2025 #34": "Oreca 07",
+  "CLX - Pure Rxcing 2025 #37": "Oreca 07",
+  "Inter Europol Competition 2025 #43": "Oreca 07",
+  "Algarve Pro Racing 2025 #45": "Oreca 07",
+  "VDS Panis Racing 2025 #48": "Oreca 07",
+  "AF Corse 2025 #183": "Oreca 07",
+  "AO By TF 2025 #199": "Oreca 07",
+
+
+
+  // =====
+  // HYPERCAR
+  // =====
+
+  // Toyota
+  "Toyota Gazoo Racing 2025 #7": "Toyota GR010",
+  "Toyota Gazoo Racing 2025 #8": "Toyota GR010",
+
+  // Porsche
+  "Porsche Penske Motorsport 2025 #4": "Porsche 963",
+  "Porsche Penske Motorsport 2025 #5": "Porsche 963",
+  "Porsche Penske Motorsport 2025 #6": "Porsche 963",
+  "Proton Competition 2025 #99": "Porsche 963",
+
+  // Peugeot
+  "Peugeot TotalEnergies 2025 #93": "Peugeot 9X8",
+  "Peugeot TotalEnergies 2025 #94": "Peugeot 9X8",
+
+  // Ferrari
+  "Ferrari AF Corse 2025 #50": "Ferrari 499P",
+  "Ferrari AF Corse 2025 #51": "Ferrari 499P",
+  "Ferrari AF Corse 2025 #83": "Ferrari 499P",
+
+  // Cadillac
+  "Cadillac Hertz Team JOTA 2025 #12": "Cadillac V-Series.R",
+  "Cadillac Hertz Team JOTA 2025 #38": "Cadillac V-Series.R",
+  "Cadillac WTR 2025 #101": "Cadillac V-Series.R",
+  "Cadillac Whelen 2025 #311": "Cadillac V-Series.R",
+
+  // BMW
+  "BMW M Team WRT 2025 #15": "BMW M Hybrid V8",
+  "BMW M Team WRT 2025 #20": "BMW M Hybrid V8",
+
+  // Aston Martin
+  "Aston Martin Thor Team 2025 #007": "Aston Martin Valkyrie LMH",
+  "Aston Martin Thor Team 2025 #009": "Aston Martin Valkyrie LMH",
+
+  // Alpine
+  "Alpine Endurance Team 2025 #35": "Alpine A424",
+  "Alpine Endurance Team 2025 #36": "Alpine A424"
+
+
+
+
+
+  // ====================
+  // 2026 WEC
+  // ====================
+
+  // =====
+  // GT3
+  // =====
+
+  // TODO: Add 2026 vehicles
+}
